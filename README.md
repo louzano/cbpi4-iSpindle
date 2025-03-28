@@ -104,14 +104,13 @@ define a phpmyadmin password.
 
 ![iSpindle Calibration](https://github.com/PiBrewing/cbpi4-iSpindle/blob/development/Spindle_Calibration.png?raw=true)
 
+- This can be done on the current data page if a spindle is not yet calibrated or from the archive page.
+- Every time you start a new recipe, the current calibration for the spindle will be used for the archive. If you start a recipe and the spindle has not been calibrated yet, you can calibrate it later and transfer the current calibration to your archive (button on the archive page)
 - For calibration of your Spindle, please have a look [here](https://www.ispindel.de/docs/Calibration_en.html)
 - Typically you get a 2nd grade polynomial which looks like `gravity = const1 * tilt^2 + const2 * tilt + const3`
 - There are also calculations that yield in a 3rd grade polynomial such as `gravity = const0 * tilt^3 + const1 * tilt^2 + const2 * tilt + const3`
 - Enter these constants into the fields for calibration of your Spindle. If you have only a 2nd grade polynomial, enter `0` for `const0`
 - There is also a Excel sheet that can be used for the calculation / calibration. You can download it from [here](https://github.com/avollkopf/iSpindel-TCP-Server/blob/master/2021_01_Spindel_Kalibrierung_Databse%20transfer.xlsm) by clicking on the download raw file button.
-- This can be done on the current data page if a spindle is not yet calibrated or from the archive page.
-- Every time you start a new recipe, the current calibration for the spindle will be used for the archive. If you start a recipe and the spindle has not been calibrated yet, you can calibrate it later and transfer the current calibration to your archive (button on the archive page)
-
 
 ![iSpindle Archive](https://github.com/PiBrewing/cbpi4-iSpindle/blob/development/Spindle_Archive_data.png?raw=true)
 
