@@ -96,7 +96,7 @@ define a phpmyadmin password.
 
 ![iSpindle Current data table with data](https://github.com/PiBrewing/cbpi4-iSpindle/blob/development/Spindle_Current_data_with_data.png?raw=true)
 
-- This Page has several buttons and you can select the SPindles that have sent data recently. 
+- This Page has several buttons and you can select the Spindles that have sent data recently. 
 - The button set recipe start should be used, if you place a spindle into your fermenter for a starting fermentation. It creates an entry in the database with the name of your fermentation (e.g. Kölsch)  and a batch (e.g. 2501 for the first batch in 2025)
 - The refresh data button refreshes the page and you will see the latest data from the spindle if a new dataset has been sent.
 - The button Show archive data will bring you to another page, where you can see all fermentations from your database and select different types of diagrams.
@@ -104,8 +104,14 @@ define a phpmyadmin password.
 
 ![iSpindle Calibration](https://github.com/PiBrewing/cbpi4-iSpindle/blob/development/Spindle_Calibration.png?raw=true)
 
+- For calibration of your Spindle, please have a look [here](https://www.ispindel.de/docs/Calibration_en.html)
+- Typically you get a 2nd grade polynomial which looks like `gravity = const1 * tilt^2 + const2 * tilt + const3`
+- There are also calculations that yield in a 3rd grade polynomial such as `gravity = const0 * tilt^3 + const1 * tilt^2 + const2 * tilt + const3`
+- Enter these constants into the fields for calibration of your Spindle. If you have only a 2nd grade polynomial, enter `0` for `const0`
+- There is also a Excel sheet thast can be used for the calculation / calibration. YOu can download it from [here](https://github.com/avollkopf/iSpindel-TCP-Server/blob/master/2021_01_Spindel_Kalibrierung_Databse%20transfer.xlsm) by clicking on the download raw file button.
 - This can be done on the current data page if a spindle is not yet calibrated or from the archive page.
 - Every time you start a new recipe, the current calibration for the spindle will be used for the archive. If you start a recipe and the spindle has not been calibrated yet, you can calibrate it later and transfer the current calibration to your archive (button on the archive page)
+
 
 ![iSpindle Archive](https://github.com/PiBrewing/cbpi4-iSpindle/blob/development/Spindle_Archive_data.png?raw=true)
 
