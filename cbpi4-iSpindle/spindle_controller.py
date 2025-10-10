@@ -382,8 +382,9 @@ class iSpindleController:
             )
             out = json.dumps(outdata).encode("utf-8")
             headers = {"Content-Type": "application/json", "User-Agent": key}
-
-            http = urllib3.PoolManager()
+    
+            retries = urllib3.util.Retry(total=0)
+            http = urllib3.PoolManager(retries=retries)
             request = http.request("POST", url, headers=headers, body=out)
             logging.info("Brewfather Data sent: " + str(out))
             if request.status != 200:

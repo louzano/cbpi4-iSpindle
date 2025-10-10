@@ -151,6 +151,7 @@ define a phpmyadmin password.
 
 ### Changelog:
 
+- 10.10.25: (1.0.2.a1) Do not allow connect retries for brewfather
 - 01.03.25: (1.0.1) Change data logging from error to info and convert json to string
 - 16.02.25: (1.0.0) Added sql database functionality from iSpindle TCP Server
 - 25.06.23: (0.0.13) change logging from 'warning' to 'info'
