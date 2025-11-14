@@ -151,7 +151,7 @@ define a phpmyadmin password.
 
 ### Changelog:
 
-- 14.11.25: (1.0.2.a3) Add SPindle Unit to global settings (Plato or SG) in order to display 1 or 3 digits in Spindle data tab
+- 14.11.25: (1.0.2.a4) Add Spindle Unit to global settings (Plato or SG) in order to display 1 or 3 digits in Spindle data tab
 - 10.10.25: (1.0.2.a2) Do not allow connect retries for brewfather
 - 01.03.25: (1.0.1) Change data logging from error to info and convert json to string
 - 16.02.25: (1.0.0) Added sql database functionality from iSpindle TCP Server
