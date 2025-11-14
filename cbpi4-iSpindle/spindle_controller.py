@@ -727,6 +727,7 @@ class iSpindleController:
         return archive_header
 
     async def get_all_archive_values(self, spindle_SQL_CONFIG, data):
+        spindle_unit = self.cbpi.config.get("spindleunit", "PLATO")
         ArchiveID = data.get("ArchiveID")
         Const0 = float(data.get("Const0"))
         Const1 = float(data.get("Const1"))
@@ -771,6 +772,8 @@ class iSpindleController:
             data = {"time": df.index.tolist()}
             for col in df.columns:
                 data[col] = df[col].tolist()
+            data['Units'] = [spindle_unit]
+            #logging.error("Data retrieved: " + str(data))
             cur.close()
             cnx.close()
         except Exception as e:
