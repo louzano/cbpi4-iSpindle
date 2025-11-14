@@ -923,6 +923,7 @@ class iSpindleController:
         spindle_data = []
         spindle_id = []
         spindle_calibration = []
+        spindle_unit = self.cbpi.config.get("spindleunit", "PLATO")
         try:
             cnx = mysql.connector.connect(
                 user=spindle_SQL_CONFIG["spindle_SQL_USER"],
@@ -1062,6 +1063,7 @@ class iSpindleController:
                         currentspindle = {
                             "label": spindle[0],
                             "value": spindle_id,
+                            "unit": spindle_unit,
                             "data": result[0],
                         }
                         spindle_data.append(currentspindle)
@@ -1069,6 +1071,7 @@ class iSpindleController:
                         currentspindle = {
                             "label": spindle[0],
                             "value": spindle_id,
+                            "unit": spindle_unit,
                             "data": {},
                         }
                         spindle_data.append(currentspindle)
@@ -1076,7 +1079,7 @@ class iSpindleController:
             cnx.close()
         except Exception as e:
             logging.error("Database Error: " + str(e))
-
+        logging.error("Recent Spindle Data: " + str(spindle_data))
         return spindle_data
 
     async def getgravityhoursago(
@@ -1115,7 +1118,7 @@ class iSpindleController:
         if result:
             angle = result[0]["angle"]
             old_gravity = round(
-                (Const0 * angle**3 + Const1 * angle**2 + Const2 * angle + Const3), 2
+                (Const0 * angle**3 + Const1 * angle**2 + Const2 * angle + Const3), 3
             )
             return old_gravity
         else:

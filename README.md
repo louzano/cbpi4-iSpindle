@@ -151,6 +151,7 @@ define a phpmyadmin password.
 
 ### Changelog:
 
+- 14.11.25: (1.0.2.a3) Add SPindle Unit to global settings (Plato or SG) in order to display 1 or 3 digits in Spindle data tab
 - 10.10.25: (1.0.2.a2) Do not allow connect retries for brewfather
 - 01.03.25: (1.0.1) Change data logging from error to info and convert json to string
 - 16.02.25: (1.0.0) Added sql database functionality from iSpindle TCP Server
@@ -161,7 +162,7 @@ define a phpmyadmin password.
 - 10.05.22: (0.0.9) Removed cbpi dependency
 - 16.01.22: (0.0.8) Adaption for cbpi 4.0.1.2
 - 13.01.22: (0.0.7) Reduced mqtt traffic -> update only for new value
-- 23.11.21: (0.0.6) Added RSSI to available parmeters
+- 23.11.21: (0.0.6) Added RSSI to available parameters
 - 10.06.21: (0.0.5) Fix to improve UI behavior with respect to frequency of value update
 - 17.04.21: Some small fixes
-- 15.03.21: Changes to suppoer cbpi >= 4.0.0.31
+- 15.03.21: Changes to support cbpi >= 4.0.0.31
