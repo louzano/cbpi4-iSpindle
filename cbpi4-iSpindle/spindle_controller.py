@@ -19,6 +19,12 @@ class iSpindleController:
     async def send_alarm(self, spindle_SQL_CONFIG, key, spindle_id):
         alarmlow = float(self.cbpi.config.get("alarmlow", 0))
         alarmsvg = self.cbpi.config.get("alarmsvg", 100)
+        spindle_unit = self.cbpi.config.get("spindle_unit", "PLATO")
+        if spindle_unit == "PLATO":
+            digits= 1
+        else:
+            digits= 3
+
         result = await self.get_recent_data(spindle_SQL_CONFIG, 1)
 
         body = (
@@ -51,9 +57,9 @@ class iSpindleController:
                                 data["unixtime"],
                                 spindle_id,
                                 round(float(data["angle"]), 1),
-                                round(float(data["InitialGravity"]), 1),
-                                round(float(data["Servergravity"]), 1),
-                                round(float(data["Delta_Gravity"]), 1),
+                                round(float(data["InitialGravity"]), digits),
+                                round(float(data["Servergravity"]), digits),
+                                round(float(data["Delta_Gravity"]), digits),
                                 round(float(data["Attenuation"]), 1),
                                 round(float(data["ABV"]), 1),
                                 round(float(data["temperature"]), 1),
@@ -85,9 +91,9 @@ class iSpindleController:
                                 data["unixtime"],
                                 spindle_id,
                                 round(float(data["angle"]), 1),
-                                round(float(data["InitialGravity"]), 1),
-                                round(float(data["Servergravity"]), 1),
-                                round(float(data["Delta_Gravity"]), 1),
+                                round(float(data["InitialGravity"]), digits),
+                                round(float(data["Servergravity"]), digits),
+                                round(float(data["Delta_Gravity"]), digits),
                                 round(float(data["Attenuation"]), 1),
                                 round(float(data["ABV"]), 1),
                                 round(float(data["temperature"]), 1),
@@ -116,6 +122,12 @@ class iSpindleController:
         pass
 
     async def send_status_update(self, spindle_SQL_CONFIG):
+        spindle_unit = self.cbpi.config.get("spindle_unit", "PLATO")
+        if spindle_unit == "PLATO":
+            digits= 1
+        else:
+            digits= 3
+
         message = ""
         body = (
             "<br/><b>Name:</b> {}"
@@ -141,9 +153,9 @@ class iSpindleController:
                         spindle["label"],
                         data["unixtime"],
                         round(float(data["angle"]), 1),
-                        round(float(data["InitialGravity"]), 1),
-                        round(float(data["Servergravity"]), 1),
-                        round(float(data["Delta_Gravity"]), 1),
+                        round(float(data["InitialGravity"]), digits),
+                        round(float(data["Servergravity"]), digits),
+                        round(float(data["Delta_Gravity"]), digits),
                         round(float(data["Attenuation"]), 1),
                         round(float(data["ABV"]), 1),
                         round(float(data["temperature"]), 1),
@@ -382,8 +394,9 @@ class iSpindleController:
             )
             out = json.dumps(outdata).encode("utf-8")
             headers = {"Content-Type": "application/json", "User-Agent": key}
-
-            http = urllib3.PoolManager()
+    
+            retries = urllib3.util.Retry(total=0)
+            http = urllib3.PoolManager(retries=retries)
             request = http.request("POST", url, headers=headers, body=out)
             logging.info("Brewfather Data sent: " + str(out))
             if request.status != 200:
@@ -500,6 +513,11 @@ class iSpindleController:
 
     async def get_archive_header_data(self, spindle_SQL_CONFIG, ArchiveID):
         result_angle = []
+        spindle_unit = self.cbpi.config.get("spindleunit", "PLATO")
+        if spindle_unit == "PLATO":
+            digits= 2
+        else:
+            digits= 3
         try:
             cnx = mysql.connector.connect(
                 user=spindle_SQL_CONFIG["spindle_SQL_USER"],
@@ -605,7 +623,7 @@ class iSpindleController:
                         + const2 * initial_angle
                         + const3
                     ),
-                    2,
+                    digits,
                 )
         except:
             initial_gravity = 0.000000001
@@ -637,7 +655,7 @@ class iSpindleController:
                         + const2 * final_angle
                         + const3
                     ),
-                    2,
+                    digits,
                 )
         except:
             final_gravity = 0.000000001
@@ -676,12 +694,14 @@ class iSpindleController:
                 "Final_Gravity",
                 "Attenuation",
                 "Alcohol_by_volume",
+                "Spindle_Unit",
             ]
         )
         archive_header["Spindle_Name"] = Spindle_Name
         archive_header["SpindleID"] = SpindleID
         archive_header["Batch"] = Batch
         archive_header["Recipe"] = Recipe
+        archive_header["Spindle_Unit"] = spindle_unit
         try:
             archive_header["Start_date"] = Start_date.strftime("%Y-%m-%d")
             archive_header["End_date"] = End_date.strftime("%Y-%m-%d")
@@ -707,6 +727,7 @@ class iSpindleController:
         return archive_header
 
     async def get_all_archive_values(self, spindle_SQL_CONFIG, data):
+        spindle_unit = self.cbpi.config.get("spindleunit", "PLATO")
         ArchiveID = data.get("ArchiveID")
         Const0 = float(data.get("Const0"))
         Const1 = float(data.get("Const1"))
@@ -751,6 +772,8 @@ class iSpindleController:
             data = {"time": df.index.tolist()}
             for col in df.columns:
                 data[col] = df[col].tolist()
+            data['Units'] = [spindle_unit]
+            #logging.error("Data retrieved: " + str(data))
             cur.close()
             cnx.close()
         except Exception as e:
@@ -922,6 +945,7 @@ class iSpindleController:
         spindle_data = []
         spindle_id = []
         spindle_calibration = []
+        spindle_unit = self.cbpi.config.get("spindleunit", "PLATO")
         try:
             cnx = mysql.connector.connect(
                 user=spindle_SQL_CONFIG["spindle_SQL_USER"],
@@ -1061,6 +1085,7 @@ class iSpindleController:
                         currentspindle = {
                             "label": spindle[0],
                             "value": spindle_id,
+                            "unit": spindle_unit,
                             "data": result[0],
                         }
                         spindle_data.append(currentspindle)
@@ -1068,6 +1093,7 @@ class iSpindleController:
                         currentspindle = {
                             "label": spindle[0],
                             "value": spindle_id,
+                            "unit": spindle_unit,
                             "data": {},
                         }
                         spindle_data.append(currentspindle)
@@ -1114,7 +1140,7 @@ class iSpindleController:
         if result:
             angle = result[0]["angle"]
             old_gravity = round(
-                (Const0 * angle**3 + Const1 * angle**2 + Const2 * angle + Const3), 2
+                (Const0 * angle**3 + Const1 * angle**2 + Const2 * angle + Const3), 3
             )
             return old_gravity
         else:

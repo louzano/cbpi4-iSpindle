@@ -62,6 +62,42 @@ class iSpindleConfigController:
                 except:
                     logger.warning("Unable to update database")
 
+        spindleunit = self.cbpi.config.get("spindleunit", None)
+        if spindleunit is None:
+            logger.warning("INIT Spindleunit")
+            try:
+                await self.cbpi.config.add(
+                    "spindleunit",
+                    "PLATO",
+                    type=ConfigType.SELECT,
+                    description="Define Unit for your SPindles (Plato or SG)",
+                    source=self.name,
+                    options=[
+                        {"label": "PLATO", "value": "PLATO"},
+                        {"label": "SG", "value": "SG"},
+                    ],
+                )
+
+                spindleunit = self.cbpi.config.get("spindleunit", "PLATO")
+            except:
+                logger.warning("Unable to update database")
+        else:
+            if self.iSpindle_update == None or self.iSpindle_update != self.version:
+                try:
+                    await self.cbpi.config.add(
+                        "spindleunit",
+                        spindleunit,
+                        type=ConfigType.SELECT,
+                        description="Define Unit for your Spindles (Plato or SG)",
+                        source=self.name,
+                        options=[
+                            {"label": "PLATO", "value": "PLATO"},
+                            {"label": "SG", "value": "SG"},
+                        ],
+                    )
+                except:
+                    logger.warning("Unable to update database")
+
         brewfather_enable = self.cbpi.config.get("brewfather_enable", None)
         if brewfather_enable is None:
             logger.warning("INIT Brewfather enable")
